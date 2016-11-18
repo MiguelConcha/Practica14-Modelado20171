@@ -1,6 +1,7 @@
 # Practica14-Modelado20171
 
 __Implementando Listas genéricas ligadas en C__ 
+![forgetting](https://cloud.githubusercontent.com/assets/13952922/20416878/25e017dc-ad07-11e6-96a6-21420e28886b.png)
 
 Una Lista es un doble apuntador a Elemento para poder modificar siempre la misma lista. Un Elemento tiene dos campos: un apuntador a un siguiente Elemento y un apuntador de tipo void —para que se agenérica la lista— a su valor. 
 
