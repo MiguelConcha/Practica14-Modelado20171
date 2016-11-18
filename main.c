@@ -45,15 +45,7 @@ int main()
 */
 int cmp_int(const void* a, const void* b)
 {
-    Elemento* e_1 = (Elemento*)a; //Los apuntadores a void los convertimos a apuntadores a Elementos.
-    Elemento* e_2 = (Elemento*)b;
-    int entero_1 = *(int*)e_1->valor; /*Y para cada uno de esos
-                                        Elementos, obtenemos su valor
-                                        entero que llevan por valor. Para
-                                        esto tenemos que convertir su apuntdor de valor
-                                        que es void, por uno de entero y luego redeferenciarlo.*/
-    int entero_2 = *(int*)e_2->valor;
-    return entero_1 - entero_2; //Y la trictomía del order puede ser evaluada en una sola línea.
+    return ((*(int*)(((Elemento*)a)->valor)) - (*(int*)(((Elemento*)b)->valor)));
 }
 
 /*
