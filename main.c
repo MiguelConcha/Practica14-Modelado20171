@@ -45,8 +45,15 @@ int main()
 */
 int cmp_int(const void* a, const void* b)
 {
-    int first_value = *(int*)a, second_value = *(int*)b; //Hacemos audiciones a apuntadores de tipo entero y luego redeferenciamos el apuntador para obtener el valor concreto en memoria.
-    return first_value-second_value; //Forma de tratar todos los casos descritos en una sola línea.
+    Elemento* e_1 = (Elemento*)a; //Los apuntadores a void los convertimos a apuntadores a Elementos.
+    Elemento* e_2 = (Elemento*)b;
+    int entero_1 = *(int*)e_1->valor; /*Y para cada uno de esos
+                                        Elementos, obtenemos su valor
+                                        entero que llevan por valor. Para
+                                        esto tenemos que convertir su apuntdor de valor
+                                        que es void, por uno de entero y luego redeferenciarlo.*/
+    int entero_2 = *(int*)e_2->valor;
+    return entero_1 - entero_2; //Y la trictomía del order puede ser evaluada en una sola línea.
 }
 
 /*
@@ -103,7 +110,7 @@ size_t longitud(Lista lista)
 }
 
 /*
-* Imprime los valore de la lista como 
+* Imprime los valores de la lista como 
 * enteros.
 */
 void imprime_lista_int(Lista lista)
@@ -195,20 +202,27 @@ void borra_lista(Lista lista)
     free(lista); //Al final de todo, liberamos la memoria que ocupada la Lista (apuntador a apuntador de Elemento).
 }
 
+/*
+* Se encarga de ordenar de forma genérica una lista ligada genérica.
+* Se recibe una lista y una función comparadora.
+*/
 void ordena_lista(Lista lista, int(*cmp)(const void*, const void*))
 {
-    size_t tam = longitud(lista);
-    Elemento* next= *lista;
-    int *arreglo = malloc(sizeof(int) * tam); 
+    size_t tam = longitud(lista); //Almacenamos esta variable para saber hasta donde iterar. También para saber qué tan grande será el arreglo.
+    Elemento* next= *lista; //Apuntamos a la cabeza de la lista.
+    Elemento* arreglo = malloc(sizeof(Elemento) * tam); //Creamos un arreglo de Elementos. Es necesario un arreglo para poder llamar a la función qsort().
     for(int i= 0; i < tam; i++){
-        arreglo[i]= *(int*)next -> valor; 
-        next= next -> siguiente;
+        arreglo[i]= *next; //En cada posición del arreglo metemos el Elemento. Como no queremos el apuntador al Elemento, tenemos que redeferenciar.
+        next= next -> siguiente; //Y vamos haciendo que apunte cada vez al siguiente Elemento de la Lista.
     }
-    qsort(arreglo, tam, sizeof(int), *cmp);
-    Elemento* next_2= *lista;
+    qsort(arreglo, tam, sizeof(Elemento), *cmp); /*Mandamos llamar a qsort() con la dirección de la cabeza del arreglo (podemos pasar 
+                                                equivalentemente el arreglo), el número de elementos del arreglo (que es el mismo 
+                                                que de Elementos en la lista), el tamaño de los saltos que tendrán que efectuarse a partir de
+                                                los tipos contenidos en el arreglo, y una función comparadora.*/
+    Elemento* next_2= *lista; //Ahora, volvemos a apuntar a la cabeza de la Lista.
     for(int i= 0; i < tam; i++){
-        *(int*)next_2 -> valor = arreglo[i]; 
-        next_2= next_2 -> siguiente;
+        next_2 -> valor = arreglo[i].valor;  //Y cada valor de los Elementos del arreglo los ponemos como campo de valor a los apuntadores de Elemento de la Lista.
+        next_2= next_2 -> siguiente; //Y vamos recorriendo toda la estructura.
     }
 }
 
